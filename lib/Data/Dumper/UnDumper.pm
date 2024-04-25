@@ -82,7 +82,7 @@ sub undumper {
 
     # Start recursing (passing the ref as both args, this first call will
     # then start walking and recursing
-    recurse_resolve($obj, $obj);
+    _recurse_resolve($obj, $obj);
 
     return $obj;
 
@@ -90,7 +90,7 @@ sub undumper {
 
 # Given a reference to the object we undumpered walk through its values
 # (array / hash values), recursing whenever another level is encountered.
-sub recurse_resolve {
+sub _recurse_resolve {
     my ($value, $obj, $depth) = @_;
 
     if ($depth++ > 50) {
@@ -99,9 +99,9 @@ sub recurse_resolve {
     }
 
     if (ref $value eq 'ARRAY') {
-        for (@$value) { recurse_resolve($_, $obj, $depth); }
+        for (@$value) { _recurse_resolve($_, $obj, $depth); }
     } elsif (ref $value eq 'HASH') {
-        for (values %$value) { recurse_resolve($_, $obj, $depth); }
+        for (values %$value) { _recurse_resolve($_, $obj, $depth); }
     } else {
         # A plain value, resolve it if it's a DUMPERREF
         if ($value =~ /^DUMPERREF:(.+)$/) {
@@ -115,7 +115,7 @@ sub recurse_resolve {
             # If the value we get is a token, then this was a ref to another
             # ref, and we need to resolve that too
             if ($value =~ /^DUMPERREF:(.+)$/) {
-                recurse_resolve($value, $obj, $depth);
+                _recurse_resolve($value, $obj, $depth);
             }
             $_[0] = $value;
         }

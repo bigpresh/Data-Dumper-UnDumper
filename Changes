@@ -1,7 +1,8 @@
 Revision history for Data-Dumper-UnDumper
 
 {{$NEXT}}
+- Fix uninitialized value warning
 
 0.01   2024-04-25
-
+- Initial version
 

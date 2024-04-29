@@ -104,7 +104,7 @@ sub _recurse_resolve {
         for (values %$value) { _recurse_resolve($_, $obj, $depth); }
     } else {
         # A plain value, resolve it if it's a DUMPERREF
-        if ($value =~ /^DUMPERREF:(.+)$/) {
+        if ($value && $value =~ /^DUMPERREF:(.+)$/) {
             # We need to unescape the escaped braces first, then what we're
             # left with should be safe to eval (FIXME prob use Safe here?)
             my $ref = $1;
